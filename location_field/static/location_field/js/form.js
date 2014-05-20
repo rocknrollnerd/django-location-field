@@ -19,13 +19,35 @@
             }
         }
 
+        function geocode_reverse(location, cb) {
+            var geocoder = new google.maps.Geocoder();
+            if (geocoder) {
+                geocoder.geocode({"latLng": location}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        cb(results[0].formatted_address);
+                    }
+                });
+            }
+        }
+
+        function getAddress(point)
+        {
+            if (point) {
+                geocode_reverse(point, function(address) {
+                    location_based.each(function() {
+                        $(this).val(address);
+                    })
+                });
+            }
+        }
+
         function load() {
             var point = new google.maps.LatLng(1, 1);
 
             var options = {
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-            
+
             location_map = new google.maps.Map(map[0], options);
 
             var initial_position;
@@ -48,11 +70,13 @@
 
             google.maps.event.addListener(marker, 'dragend', function(mouseEvent) {
                 savePosition(mouseEvent.latLng);
+                getAddress(mouseEvent.latLng);
             });
 
             google.maps.event.addListener(location_map, 'click', function(mouseEvent){
                 marker.setPosition(mouseEvent.latLng);
                 savePosition(mouseEvent.latLng);
+                getAddress(mouseEvent.latLng);
             });
 
             var no_change = false;
@@ -75,7 +99,7 @@
                                 lstr.push(b.val())
                         });
 
-                        if (lstr.length > 0 && suffix != '') 
+                        if (lstr.length > 0 && suffix != '')
                             lstr.push(suffix);
 
                         geocode(lstr.join(','), function(l){
@@ -117,18 +141,6 @@
                 var geocoder = new google.maps.Geocoder();
                 if (geocoder) {
                     geocoder.geocode({"address": address}, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            cb(results[0].geometry.location);
-                            placeMarker(results[0].geometry.location);
-                        }
-                    });
-                }
-            }
-
-            function geocode_reverse(location, cb) {
-                var geocoder = new google.maps.Geocoder();
-                if (geocoder) {
-                    geocoder.geocode({"latLng": location}, function(results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             cb(results[0].geometry.location);
                             placeMarker(results[0].geometry.location);
