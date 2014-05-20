@@ -1,16 +1,10 @@
-from distutils.core import setup
-from distutils.command.install import INSTALL_SCHEMES
+from setuptools import setup
 import os
 
 root = os.path.dirname(os.path.abspath(__file__))
 os.chdir(root)
 
 VERSION = __import__('location_field').__version__
-
-# Make data go to the right place.
-# http://groups.google.com/group/comp.lang.python/browse_thread/thread/35ec7b2fed36eaec/2105ee4d9e8042cb
-for scheme in INSTALL_SCHEMES.values():
-    scheme['data'] = scheme['purelib']
 
 
 setup(
@@ -24,7 +18,8 @@ setup(
     license="MIT License",
     platforms=["any"],
     packages=['location_field'],
-    package_data={'location_field': ['static/location_field/js/*.js',],},
+    package_data={'location_field': ['static/location_field/js/*.js',
+                                     'templates/location_field/*.html'], },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
