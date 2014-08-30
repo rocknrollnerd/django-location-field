@@ -6,8 +6,8 @@ from django.utils.safestring import mark_safe
 LOCATION_GOOGLE_MAPS_V3_APIKEY = getattr(settings, 'LOCATION_GOOGLE_MAPS_V3_APIKEY', None)
 LOCATION_GOOGLE_API_JS = getattr(settings, 'LOCATION_GOOGLE_API_JS', '//maps.google.com/maps/api/js?sensor=false')
 
-if GOOGLE_MAPS_V3_APIKEY:
-    LOCATION_GOOGLE_API_JS = '{0}&key={1}'.format(LOCATION_GOOGLE_API_JS, GOOGLE_MAPS_V3_APIKEY)
+if LOCATION_GOOGLE_MAPS_V3_APIKEY:
+    LOCATION_GOOGLE_API_JS = '{0}&key={1}'.format(LOCATION_GOOGLE_API_JS, LOCATION_GOOGLE_MAPS_V3_APIKEY)
 
 
 class LocationWidget(widgets.TextInput):
