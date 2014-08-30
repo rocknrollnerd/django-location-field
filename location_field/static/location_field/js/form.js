@@ -1,5 +1,5 @@
 ($ || django.jQuery)(function($){
-    function location_field_load(map, location_based, zoom, suffix)
+    function location_field_load(map, location_based, zoom, suffix, updateOnKeyup)
     {
         var parent = map.parent().parent();
 
@@ -118,7 +118,7 @@
             var location_coordinate_delay;
 
             location_coordinate.keyup(function(){
-                if (no_change) return;
+                if (no_change || !updateOnKeyup) return;
                 var latlng = $(this).val().split(/,/);
                 if (latlng.length < 2) return;
                 clearTimeout(location_coordinate_delay);
@@ -163,7 +163,8 @@
             $based_fields = $($el.attr('data-based-fields')),
             zoom = parseInt($el.attr('data-zoom')),
             suffix = $el.attr('data-suffix');
+            updateOnKeyup = $el.data('keyup-update');
 
-        location_field_load($map, $based_fields, zoom, suffix);
+        location_field_load($map, $based_fields, zoom, suffix, updateOnKeyup);
     });
 });

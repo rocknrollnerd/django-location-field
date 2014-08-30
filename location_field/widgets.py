@@ -3,11 +3,11 @@ from django.forms import widgets
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
-GOOGLE_MAPS_V3_APIKEY = getattr(settings, 'GOOGLE_MAPS_V3_APIKEY', None)
-GOOGLE_API_JS = getattr(settings, 'GOOGLE_API_JS', '//maps.google.com/maps/api/js?sensor=false')
+LOCATION_GOOGLE_MAPS_V3_APIKEY = getattr(settings, 'LOCATION_GOOGLE_MAPS_V3_APIKEY', None)
+LOCATION_GOOGLE_API_JS = getattr(settings, 'LOCATION_GOOGLE_API_JS', '//maps.google.com/maps/api/js?sensor=false')
 
 if GOOGLE_MAPS_V3_APIKEY:
-    GOOGLE_API_JS = '{0}&key={1}'.format(GOOGLE_API_JS, GOOGLE_MAPS_V3_APIKEY)
+    LOCATION_GOOGLE_API_JS = '{0}&key={1}'.format(LOCATION_GOOGLE_API_JS, GOOGLE_MAPS_V3_APIKEY)
 
 
 class LocationWidget(widgets.TextInput):
@@ -49,6 +49,7 @@ class LocationWidget(widgets.TextInput):
         attrs['data-zoom'] = self.zoom
         attrs['data-suffix'] = self.suffix
         attrs['data-map'] = '#map_' + name
+        attrs['data-keyup-update'] = settings.get('LOCATION_UPDATE_ON_KEYUP', True)  # yes by default
 
         text_input = super(LocationWidget, self).render(name, value, attrs)
 
@@ -60,6 +61,6 @@ class LocationWidget(widgets.TextInput):
     class Media:
         # Use schemaless URL so it works with both, http and https websites
         js = (
-            GOOGLE_API_JS,
+            LOCATION_GOOGLE_API_JS,
             settings.STATIC_URL + 'location_field/js/form.js',
         )
