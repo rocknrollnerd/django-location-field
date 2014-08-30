@@ -49,7 +49,9 @@ class LocationWidget(widgets.TextInput):
         attrs['data-zoom'] = self.zoom
         attrs['data-suffix'] = self.suffix
         attrs['data-map'] = '#map_' + name
-        attrs['data-keyup-update'] = settings.get('LOCATION_UPDATE_ON_KEYUP', True)  # yes by default
+        attrs['data-keyup-update'] = "true"
+        if getattr(settings, 'LOCATION_NO_UPDATE_ON_KEYUP', False):
+            attrs['data-keyup-update'] = "false"
 
         text_input = super(LocationWidget, self).render(name, value, attrs)
 

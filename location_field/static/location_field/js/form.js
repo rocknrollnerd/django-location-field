@@ -101,11 +101,12 @@
 
                         if (lstr.length > 0 && suffix != '')
                             lstr.push(suffix);
-
-                        geocode(lstr.join(','), function(l){
-                            location_coordinate.val(l.lat()+','+l.lng());
-                            setTimeout(function(){ no_change = false; }, 2000);
-                        });
+                        if (updateOnKeyup) {
+                            geocode(lstr.join(','), function(l){
+                                location_coordinate.val(l.lat()+','+l.lng());
+                                setTimeout(function(){ no_change = false; }, 2000);
+                            });
+                        };
                     };
 
                 if (f.is('select'))
@@ -118,7 +119,7 @@
             var location_coordinate_delay;
 
             location_coordinate.keyup(function(){
-                if (no_change || !updateOnKeyup) return;
+                if (no_change) return;
                 var latlng = $(this).val().split(/,/);
                 if (latlng.length < 2) return;
                 clearTimeout(location_coordinate_delay);
